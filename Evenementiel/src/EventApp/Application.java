@@ -63,6 +63,34 @@ public class Application {
 		return st;
 	}
 	
+	//Nom de salle grande capacité
+	public Statement grandeSalle(Connection cn) {
+		Statement st = null;
+		try {
+			//Creation d'un statement;
+			st = cn.createStatement();
+			String sql = "SELECT MAX(capacite), capacite, nom FROM evenement.salle";
+			//Execution requete
+			ResultSet result = st.executeQuery(sql);
+						
+			String nomSalle;
+			int capacite;
+			
+			while(result.next()) {
+				//Recuperer le nom client
+				nomSalle = result.getString("nom");
+				//Recuperer la capacite
+				capacite = result.getInt("capacite");
+				
+				System.out.println("La plus grande salle de concert est "+nomSalle+" avec "+capacite+" places.");
+				}			
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		return st;
+	}
+	
 	//Methode de fermeture
 	public void fermetureConnexion(Connection cn, Statement st) throws InterruptedException {
 		try {
@@ -87,6 +115,9 @@ public class Application {
 		
 		//Date de Corneille au Zenith
 		st=test.dateCorneilleZenith(cn);
+		
+		//Nom de salle grande capacité
+		st=test.grandeSalle(cn);
 		
 		//Fermeture de la connexion
 		test.fermetureConnexion(cn, st);
